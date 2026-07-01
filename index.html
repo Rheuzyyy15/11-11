@@ -168,7 +168,7 @@
 
     .time {
       align-self: start;
-      margin-top: -10px;
+      margin-top: 0px;
       font-size: clamp(4.8rem, 16vw, 9.2rem);
       line-height: 0.9;
       font-weight: 800;
@@ -675,7 +675,7 @@
       <div class="wish-header">
         <p class="kicker">11:11</p>
         <h1 id="wishTitle"><span class="headline-glow">My sweet handsome babyyy</span></h1>
-        <p class="current-line" id="currentLine">I am so so sooo proud of you.</p>
+        
       </div>
 
       <div>
@@ -683,13 +683,13 @@
           <div class="center-keepsake" aria-hidden="true">
             <div>
               <strong>11:11</strong>
-              <span>Let's meet in our successful life.</span>
+              <span>Let's be successful together.</span>
             </div>
           </div>
           <div class="star-field" id="starField"></div>
         </div>
 
-        <article class="message-panel" aria-live="polite">
+        <article class="message-panel" id="messagePanel" aria-live="polite" hidden>
           <p class="panel-eyebrow" id="panelLabel">Proud of you</p>
           <h2 id="panelTitle">I can see your effort.</h2>
           <p id="panelText">Every dream you chase, every hard day you keep moving through, every small step still counts.</p>
@@ -805,8 +805,8 @@
     const panelLabel = document.querySelector("#panelLabel");
     const panelTitle = document.querySelector("#panelTitle");
     const panelText = document.querySelector("#panelText");
-    const currentLine = document.querySelector("#currentLine");
-    const wishActions = document.querySelector("#wishActions");
+    const messagePanel = document.querySelector("#messagePanel");
+        const wishActions = document.querySelector("#wishActions");
     const replayButton = document.querySelector("#replayButton");
     const letterButton = document.querySelector("#letterButton");
     const letterDialog = document.querySelector("#letterDialog");
@@ -845,7 +845,6 @@
         intro.classList.remove("active");
         wishView.classList.add("active");
         wishActions.hidden = false;
-        selectWish(0);
         restartCycle();
       }, 620);
     }
@@ -858,28 +857,11 @@
       });
       panelLabel.textContent = wish.label;
       panelTitle.textContent = wish.title;
+      messagePanel.hidden = false;
       panelText.textContent = wish.text;
-      typeLine(wish.line, instant);
     }
 
-    function typeLine(text, instant) {
-      clearInterval(typingTimer);
-      if (instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        currentLine.textContent = text;
-        return;
-      }
-      currentLine.textContent = "";
-      let index = 0;
-      typingTimer = setInterval(() => {
-        currentLine.textContent += text[index] || "";
-        index += 1;
-        if (index >= text.length) {
-          clearInterval(typingTimer);
-        }
-      }, 18);
-    }
-
-    function restartCycle() {
+        function restartCycle() {
       clearInterval(cycleTimer);
       cycleTimer = setInterval(() => {
         selectWish((activeIndex + 1) % wishes.length);
