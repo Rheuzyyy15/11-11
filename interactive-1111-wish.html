@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>11:11 Wish</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --ink: #fff8f3;
+      --muted: #d6c6c6;
+      --soft: rgba(255, 248, 243, 0.72);
+      --night: #09080d;
+      --rose: #ff7099;
+      --gold: #ffd37a;
+      --mint: #9ff1d0;
+      --blue: #8fc7ff;
+      --plum: #3b1738;
+      --panel: rgba(18, 12, 20, 0.62);
+      --line: rgba(255, 255, 255, 0.18);
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      min-height: 100%;
+      background: var(--night);
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      font-family: "Segoe UI", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 18% 16%, rgba(255, 112, 153, 0.32), transparent 30rem),
+        radial-gradient(circle at 86% 12%, rgba(159, 241, 208, 0.18), transparent 26rem),
+        radial-gradient(circle at 62% 78%, rgba(255, 211, 122, 0.16), transparent 30rem),
+        linear-gradient(135deg, #08070c 0%, #1a1119 42%, #0c1216 100%);
+    }
+
+    button {
+      font: inherit;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    #sky {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .aurora {
+      position: fixed;
+      inset: -20%;
+      z-index: 0;
+      opacity: 0.62;
+      pointer-events: none;
+      background:
+        conic-gradient(from 150deg at 50% 50%, transparent 0 18%, rgba(255, 112, 153, 0.18), transparent 36% 52%, rgba(159, 241, 208, 0.14), transparent 72% 100%);
+      filter: blur(58px);
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .experience {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      place-items: center;
+      padding: clamp(18px, 3vw, 38px);
+    }
+
+    .view {
+      width: min(1120px, 100%);
+      display: none;
+    }
+
+    .view.active {
+      display: grid;
+    }
+
+    .intro {
+      min-height: calc(100vh - clamp(36px, 6vw, 76px));
+      place-items: center;
+      text-align: center;
+    }
+
+    .intro-shell {
+      display: grid;
+      justify-items: center;
+      gap: clamp(18px, 4vw, 32px);
+      width: min(680px, 100%);
+    }
+
+    .clock-button {
+      position: relative;
+      width: clamp(230px, 52vw, 390px);
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      gap: 0;
+      padding: 0;
+      color: var(--ink);
+      cursor: pointer;
+      isolation: isolate;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 35% 28%, rgba(255, 255, 255, 0.24), transparent 18%),
+        radial-gradient(circle at 58% 68%, rgba(255, 211, 122, 0.28), transparent 28%),
+        linear-gradient(145deg, rgba(255, 112, 153, 0.36), rgba(32, 17, 30, 0.74) 54%, rgba(159, 241, 208, 0.18));
+      box-shadow:
+        0 0 0 10px rgba(255, 255, 255, 0.035),
+        0 0 64px rgba(255, 112, 153, 0.34),
+        var(--shadow);
+      transition: transform 260ms ease, box-shadow 260ms ease, border-color 260ms ease;
+    }
+
+    .clock-button:hover,
+    .clock-button:focus-visible {
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(255, 211, 122, 0.62);
+      box-shadow:
+        0 0 0 12px rgba(255, 255, 255, 0.045),
+        0 0 86px rgba(255, 211, 122, 0.34),
+        var(--shadow);
+      outline: none;
+    }
+
+    .clock-button::before,
+    .clock-button::after {
+      content: "";
+      position: absolute;
+      inset: 8%;
+      z-index: -1;
+      border-radius: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      animation: breathe 3.8s ease-in-out infinite;
+    }
+
+    .clock-button::after {
+      inset: -8%;
+      border-color: rgba(255, 211, 122, 0.12);
+      animation-delay: -1.4s;
+    }
+
+    .make {
+      align-self: end;
+      margin-bottom: -8px;
+      font-size: clamp(0.78rem, 1.7vw, 0.92rem);
+      letter-spacing: 0;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .time {
+      align-self: start;
+      margin-top: -10px;
+      font-size: clamp(4.8rem, 16vw, 9.2rem);
+      line-height: 0.9;
+      font-weight: 800;
+      letter-spacing: 0;
+      text-shadow:
+        0 0 12px rgba(255, 248, 243, 0.5),
+        0 0 40px rgba(255, 112, 153, 0.5);
+    }
+
+    .intro-note {
+      max-width: 42rem;
+      margin: 0;
+      color: var(--soft);
+      font-size: clamp(1rem, 2.5vw, 1.35rem);
+      line-height: 1.65;
+    }
+
+    .wish-track {
+      width: min(360px, 75vw);
+      height: 5px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+    }
+
+    .wish-track span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--rose), var(--gold), var(--mint));
+      transition: width 850ms cubic-bezier(.2, .7, .2, 1);
+    }
+
+    .wish-view {
+      min-height: calc(100vh - clamp(36px, 6vw, 76px));
+      align-items: center;
+      grid-template-columns: minmax(0, 0.95fr) minmax(310px, 0.78fr);
+      gap: clamp(24px, 5vw, 58px);
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .wish-view.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .wish-header {
+      align-self: stretch;
+      display: grid;
+      align-content: center;
+      gap: clamp(12px, 2vw, 18px);
+      min-width: 0;
+    }
+
+    .kicker {
+      width: max-content;
+      margin: 0;
+      padding: 0.42rem 0.72rem;
+      border: 1px solid rgba(255, 211, 122, 0.32);
+      border-radius: 999px;
+      color: var(--gold);
+      background: rgba(255, 211, 122, 0.08);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin: 0;
+      font-size: clamp(3.2rem, 10vw, 7.7rem);
+      line-height: 0.92;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .headline-glow {
+      color: transparent;
+      background: linear-gradient(105deg, #fff8f3 0 24%, #ffd37a 42%, #ff8aac 62%, #9ff1d0 86%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 14px 40px rgba(255, 112, 153, 0.22));
+    }
+
+    .current-line {
+      min-height: 5.6em;
+      max-width: 44rem;
+      margin: 0;
+      color: var(--soft);
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      line-height: 1.65;
+    }
+
+    .constellation {
+      position: relative;
+      width: min(88vw, 600px);
+      aspect-ratio: 1;
+      margin-inline: auto;
+      align-self: center;
+    }
+
+    .constellation::before {
+      content: "";
+      position: absolute;
+      inset: 13%;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow:
+        inset 0 0 40px rgba(255, 255, 255, 0.035),
+        0 0 90px rgba(159, 241, 208, 0.1);
+    }
+
+    .constellation::after {
+      content: "";
+      position: absolute;
+      inset: 28%;
+      border-radius: 999px;
+      border: 1px dashed rgba(255, 211, 122, 0.18);
+      animation: spin 28s linear infinite;
+    }
+
+    .center-keepsake {
+      position: absolute;
+      inset: 28%;
+      z-index: 2;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      border-radius: 999px;
+      padding: clamp(18px, 4vw, 30px);
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.18), transparent 34%),
+        linear-gradient(155deg, rgba(255, 248, 243, 0.12), rgba(255, 112, 153, 0.08), rgba(159, 241, 208, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(18px);
+    }
+
+    .center-keepsake strong {
+      display: block;
+      color: var(--ink);
+      font-size: clamp(1.8rem, 5vw, 3.4rem);
+      line-height: 0.95;
+    }
+
+    .center-keepsake span {
+      display: block;
+      margin-top: 0.7rem;
+      color: rgba(255, 255, 255, 0.68);
+      font-size: clamp(0.78rem, 1.7vw, 0.96rem);
+      line-height: 1.35;
+    }
+
+    .star-field {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+    }
+
+    .wish-star {
+      --size: clamp(48px, 8vw, 66px);
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      color: var(--ink);
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.56), transparent 20%),
+        linear-gradient(145deg, rgba(255, 211, 122, 0.34), rgba(255, 112, 153, 0.18), rgba(159, 241, 208, 0.16));
+      box-shadow:
+        0 0 22px rgba(255, 211, 122, 0.22),
+        0 14px 32px rgba(0, 0, 0, 0.24);
+      transform: translate(-50%, -50%);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
+
+    .wish-star::before {
+      content: "✦";
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      line-height: 1;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.75));
+    }
+
+    .wish-star:hover,
+    .wish-star:focus-visible,
+    .wish-star.active {
+      transform: translate(-50%, -50%) scale(1.1);
+      border-color: rgba(255, 211, 122, 0.7);
+      box-shadow:
+        0 0 34px rgba(255, 211, 122, 0.38),
+        0 18px 38px rgba(0, 0, 0, 0.32);
+      outline: none;
+    }
+
+    .wish-star.active::before {
+      content: "✷";
+    }
+
+    .message-panel {
+      position: absolute;
+      left: 50%;
+      bottom: clamp(-26px, -3vw, -10px);
+      z-index: 5;
+      width: min(92vw, 520px);
+      min-height: 210px;
+      display: grid;
+      align-content: start;
+      gap: 0.75rem;
+      padding: clamp(18px, 3vw, 28px);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 8px;
+      color: var(--ink);
+      background:
+        linear-gradient(140deg, rgba(255, 248, 243, 0.13), rgba(255, 112, 153, 0.08), rgba(8, 7, 12, 0.58)),
+        var(--panel);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      transform: translateX(-50%);
+    }
+
+    .panel-eyebrow {
+      margin: 0;
+      color: var(--gold);
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .message-panel h2 {
+      margin: 0;
+      font-size: clamp(1.25rem, 3vw, 2rem);
+      line-height: 1.15;
+      letter-spacing: 0;
+      text-wrap: balance;
+    }
+
+    .message-panel p:last-child {
+      margin: 0;
+      color: rgba(255, 248, 243, 0.78);
+      font-size: clamp(0.96rem, 1.8vw, 1.05rem);
+      line-height: 1.65;
+    }
+
+    .wish-actions {
+      position: fixed;
+      right: clamp(14px, 2.2vw, 26px);
+      bottom: clamp(14px, 2.2vw, 26px);
+      z-index: 8;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .icon-button,
+    .letter-button {
+      min-width: 46px;
+      height: 46px;
+      display: inline-grid;
+      place-items: center;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      color: var(--ink);
+      cursor: pointer;
+      background: rgba(12, 10, 16, 0.72);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.28);
+      backdrop-filter: blur(14px);
+      transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+    }
+
+    .letter-button {
+      grid-template-columns: 22px auto;
+      gap: 8px;
+      width: auto;
+      padding-inline: 15px 18px;
+      font-weight: 750;
+    }
+
+    .icon-button:hover,
+    .icon-button:focus-visible,
+    .letter-button:hover,
+    .letter-button:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(255, 211, 122, 0.56);
+      background: rgba(34, 22, 32, 0.82);
+      outline: none;
+    }
+
+    .icon-button svg,
+    .letter-button svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    dialog {
+      width: min(720px, calc(100vw - 28px));
+      max-height: min(760px, calc(100vh - 28px));
+      padding: 0;
+      overflow: hidden;
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255, 112, 153, 0.18), transparent 16rem),
+        radial-gradient(circle at 92% 12%, rgba(159, 241, 208, 0.14), transparent 15rem),
+        rgba(13, 10, 16, 0.94);
+      box-shadow: 0 30px 110px rgba(0, 0, 0, 0.54);
+    }
+
+    dialog::backdrop {
+      background: rgba(0, 0, 0, 0.62);
+      backdrop-filter: blur(7px);
+    }
+
+    .letter {
+      position: relative;
+      max-height: inherit;
+      overflow: auto;
+      padding: clamp(22px, 4vw, 38px);
+    }
+
+    .letter h2 {
+      margin: 0 3rem 1rem 0;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 0.98;
+      letter-spacing: 0;
+    }
+
+    .letter p {
+      margin: 0 0 1rem;
+      color: rgba(255, 248, 243, 0.82);
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    .close-button {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .spark {
+      position: fixed;
+      z-index: 20;
+      width: 8px;
+      height: 8px;
+      pointer-events: none;
+      border-radius: 999px;
+      background: var(--spark-color, var(--gold));
+      box-shadow: 0 0 18px var(--spark-color, var(--gold));
+      animation: burst 720ms ease-out forwards;
+    }
+
+    @keyframes drift {
+      from {
+        transform: translate3d(-2%, 1%, 0) rotate(-6deg) scale(1);
+      }
+      to {
+        transform: translate3d(2%, -2%, 0) rotate(8deg) scale(1.07);
+      }
+    }
+
+    @keyframes breathe {
+      0%, 100% {
+        transform: scale(0.98);
+        opacity: 0.45;
+      }
+      50% {
+        transform: scale(1.035);
+        opacity: 0.9;
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes burst {
+      to {
+        transform: translate(var(--dx), var(--dy)) scale(0);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 920px) {
+      .wish-view {
+        grid-template-columns: 1fr;
+        align-content: start;
+        padding-bottom: 120px;
+      }
+
+      .wish-header {
+        justify-items: center;
+        text-align: center;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+
+      .current-line {
+        min-height: 0;
+      }
+
+      .constellation {
+        width: min(92vw, 560px);
+        margin-top: 8px;
+      }
+
+      .message-panel {
+        position: relative;
+        left: auto;
+        bottom: auto;
+        width: min(100%, 560px);
+        margin: 18px auto 0;
+        transform: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .experience {
+        padding: 16px;
+      }
+
+      .intro-shell {
+        gap: 18px;
+      }
+
+      .constellation {
+        width: min(92vw, 430px);
+      }
+
+      .center-keepsake {
+        inset: 25%;
+      }
+
+      .wish-actions {
+        left: 12px;
+        right: 12px;
+        justify-content: center;
+      }
+
+      .letter-button {
+        max-width: calc(100vw - 86px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky" aria-hidden="true"></canvas>
+  <div class="aurora" aria-hidden="true"></div>
+
+  <main class="experience">
+    <section class="intro view active" id="intro" aria-labelledby="introTitle">
+      <div class="intro-shell">
+        <button class="clock-button" id="wishButton" type="button" aria-label="Make the 11:11 wish">
+          <span class="make" id="introTitle">Make a wish</span>
+          <span class="time">11:11</span>
+        </button>
+        <p class="intro-note">For my sweet handsome babyyy, wrapped in pride, prayers, little wins, and the promise of a successful life together.</p>
+        <div class="wish-track" aria-hidden="true"><span id="wishTrack"></span></div>
+      </div>
+    </section>
+
+    <section class="wish-view view" id="wishView" aria-labelledby="wishTitle">
+      <div class="wish-header">
+        <p class="kicker">11:11</p>
+        <h1 id="wishTitle"><span class="headline-glow">My sweet handsome babyyy</span></h1>
+        <p class="current-line" id="currentLine">I am so so sooo proud of you.</p>
+      </div>
+
+      <div>
+        <div class="constellation" aria-label="Wish constellation">
+          <div class="center-keepsake" aria-hidden="true">
+            <div>
+              <strong>11:11</strong>
+              <span>Let's meet in our successful life.</span>
+            </div>
+          </div>
+          <div class="star-field" id="starField"></div>
+        </div>
+
+        <article class="message-panel" aria-live="polite">
+          <p class="panel-eyebrow" id="panelLabel">Proud of you</p>
+          <h2 id="panelTitle">I can see your effort.</h2>
+          <p id="panelText">Every dream you chase, every hard day you keep moving through, every small step still counts.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="wish-actions" id="wishActions" hidden>
+    <button class="icon-button" id="replayButton" type="button" aria-label="Replay the wish" title="Replay">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M3 12a9 9 0 1 0 3-6.7"></path>
+        <path d="M3 4v6h6"></path>
+      </svg>
+    </button>
+    <button class="letter-button" id="letterButton" type="button" aria-label="Open the full wish" title="Full wish">
+      <svg viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v11a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 4 17.5z"></path>
+        <path d="m6 8 6 5 6-5"></path>
+      </svg>
+      <span>Full wish</span>
+    </button>
+  </div>
+
+  <dialog id="letterDialog" aria-labelledby="letterTitle">
+    <div class="letter">
+      <button class="icon-button close-button" id="closeLetter" type="button" aria-label="Close full wish" title="Close">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+      <h2 id="letterTitle">11:11 wish</h2>
+      <p>11:11 my sweet handsome babyyy. I just want you to know that I am so so sooo proud of you.</p>
+      <p>I can see how much effort you put into everything you've set your eyes on, how determined you are to achieve the things you want to accomplish, and how strong your resolve is.</p>
+      <p>I really wish you achieve all your dreams, goals, visions, ambitions, and prayers. I wish for you to become successful and to be the person you've always yearned to become, even before I came into your life.</p>
+      <p>I'm just here, rooting for you, clapping for you, and celebrating every milestone you reach, including the small wins that deserve to be celebrated just as much.</p>
+      <p>Like what you always say, "Let's meet in our successful life." But I just want you to know that I'm here while you're paving your way to success.</p>
+      <p>I'm not just standing still though, because while I'm watching you win, I'll also do my very best to reach my own dreams. Let's be successful together babyyyy.</p>
+      <p>I can't wait for the day we look back and realize that all the sacrifices, hard work, and prayers were worth it. I'll always believe in you, just like I hope you'll always believe in yourself.</p>
+      <p>I love you sooo much mister kooo. Mwahhhh😚</p>
+    </div>
+  </dialog>
+
+  <script>
+    const wishes = [
+      {
+        label: "Proud of you",
+        title: "I am so so sooo proud of you.",
+        text: "I can see how much effort you put into everything you've set your eyes on, how determined you are, and how strong your resolve is.",
+        line: "I can see your effort, your determination, and every quiet way you keep choosing the life you want."
+      },
+      {
+        label: "Dreams",
+        title: "May every dream find you.",
+        text: "I really wish you achieve all your dreams, goals, visions, ambitions, and prayers.",
+        line: "I wish every dream, goal, vision, ambition, and prayer finds its way to you."
+      },
+      {
+        label: "Becoming",
+        title: "Become who you have always yearned to be.",
+        text: "Even before I came into your life, that future version of you was already calling. I hope you meet him with pride.",
+        line: "I hope you become the person you've always yearned to become."
+      },
+      {
+        label: "Rooting",
+        title: "I am here while you pave your way.",
+        text: "I'm rooting for you, clapping for you, and celebrating every milestone you reach.",
+        line: "I'm here, cheering for the big victories and the small wins that deserve just as much love."
+      },
+      {
+        label: "Together",
+        title: "Let's be successful together.",
+        text: "While I'm watching you win, I'll also do my very best to reach my own dreams.",
+        line: "I'm not just standing still. I'm reaching too, so we can build that successful life side by side."
+      },
+      {
+        label: "Worth it",
+        title: "One day, we will look back.",
+        text: "I can't wait for the day we realize that all the sacrifices, hard work, and prayers were worth it.",
+        line: "One day this season will become proof that the hard work and prayers were worth it."
+      },
+      {
+        label: "Believe",
+        title: "I will always believe in you.",
+        text: "I hope you always believe in yourself the way I believe in you.",
+        line: "I'll always believe in you, and I hope you keep believing in yourself too."
+      },
+      {
+        label: "Love",
+        title: "I love you sooo much, mister kooo.",
+        text: "Mwahhhh😚",
+        line: "I love you sooo much, mister kooo. Mwahhhh😚"
+      }
+    ];
+
+    const positions = [
+      ["50%", "5%"],
+      ["79%", "16%"],
+      ["94%", "47%"],
+      ["77%", "82%"],
+      ["50%", "95%"],
+      ["22%", "82%"],
+      ["6%", "47%"],
+      ["22%", "16%"]
+    ];
+
+    const intro = document.querySelector("#intro");
+    const wishView = document.querySelector("#wishView");
+    const wishButton = document.querySelector("#wishButton");
+    const wishTrack = document.querySelector("#wishTrack");
+    const starField = document.querySelector("#starField");
+    const panelLabel = document.querySelector("#panelLabel");
+    const panelTitle = document.querySelector("#panelTitle");
+    const panelText = document.querySelector("#panelText");
+    const currentLine = document.querySelector("#currentLine");
+    const wishActions = document.querySelector("#wishActions");
+    const replayButton = document.querySelector("#replayButton");
+    const letterButton = document.querySelector("#letterButton");
+    const letterDialog = document.querySelector("#letterDialog");
+    const closeLetter = document.querySelector("#closeLetter");
+    let activeIndex = 0;
+    let cycleTimer;
+    let typingTimer;
+
+    wishes.forEach((wish, index) => {
+      const star = document.createElement("button");
+      star.className = "wish-star";
+      star.type = "button";
+      star.style.setProperty("--x", positions[index][0]);
+      star.style.setProperty("--y", positions[index][1]);
+      star.setAttribute("aria-label", wish.label);
+      star.title = wish.label;
+      star.dataset.index = index;
+      const label = document.createElement("span");
+      label.className = "sr-only";
+      label.textContent = wish.label;
+      star.append(label);
+      star.addEventListener("click", (event) => {
+        selectWish(index, true);
+        sparkleAt(event.clientX, event.clientY, 18);
+        restartCycle();
+      });
+      starField.append(star);
+    });
+
+    const starButtons = [...document.querySelectorAll(".wish-star")];
+
+    function unlockWish() {
+      wishTrack.style.width = "100%";
+      sparkleAt(window.innerWidth / 2, window.innerHeight / 2, 42);
+      setTimeout(() => {
+        intro.classList.remove("active");
+        wishView.classList.add("active");
+        wishActions.hidden = false;
+        selectWish(0);
+        restartCycle();
+      }, 620);
+    }
+
+    function selectWish(index, instant = false) {
+      activeIndex = index;
+      const wish = wishes[index];
+      starButtons.forEach((star, starIndex) => {
+        star.classList.toggle("active", starIndex === index);
+      });
+      panelLabel.textContent = wish.label;
+      panelTitle.textContent = wish.title;
+      panelText.textContent = wish.text;
+      typeLine(wish.line, instant);
+    }
+
+    function typeLine(text, instant) {
+      clearInterval(typingTimer);
+      if (instant || window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        currentLine.textContent = text;
+        return;
+      }
+      currentLine.textContent = "";
+      let index = 0;
+      typingTimer = setInterval(() => {
+        currentLine.textContent += text[index] || "";
+        index += 1;
+        if (index >= text.length) {
+          clearInterval(typingTimer);
+        }
+      }, 18);
+    }
+
+    function restartCycle() {
+      clearInterval(cycleTimer);
+      cycleTimer = setInterval(() => {
+        selectWish((activeIndex + 1) % wishes.length);
+      }, 6200);
+    }
+
+    function sparkleAt(x, y, count = 14) {
+      const colors = ["#ffd37a", "#ff7099", "#9ff1d0", "#8fc7ff", "#fff8f3"];
+      for (let i = 0; i < count; i += 1) {
+        const spark = document.createElement("span");
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 34 + Math.random() * 96;
+        spark.className = "spark";
+        spark.style.left = `${x}px`;
+        spark.style.top = `${y}px`;
+        spark.style.setProperty("--dx", `${Math.cos(angle) * distance}px`);
+        spark.style.setProperty("--dy", `${Math.sin(angle) * distance}px`);
+        spark.style.setProperty("--spark-color", colors[Math.floor(Math.random() * colors.length)]);
+        document.body.append(spark);
+        spark.addEventListener("animationend", () => spark.remove(), { once: true });
+      }
+    }
+
+    wishButton.addEventListener("click", unlockWish);
+    replayButton.addEventListener("click", () => {
+      selectWish(0);
+      sparkleAt(window.innerWidth / 2, window.innerHeight / 2, 34);
+      restartCycle();
+    });
+
+    letterButton.addEventListener("click", () => {
+      if (typeof letterDialog.showModal === "function") {
+        letterDialog.showModal();
+      } else {
+        letterDialog.setAttribute("open", "");
+      }
+    });
+
+    closeLetter.addEventListener("click", () => letterDialog.close());
+    letterDialog.addEventListener("click", (event) => {
+      if (event.target === letterDialog) {
+        letterDialog.close();
+      }
+    });
+
+    const canvas = document.querySelector("#sky");
+    const context = canvas.getContext("2d");
+    const stars = [];
+    const lanterns = [];
+    let width = 0;
+    let height = 0;
+    let frame = 0;
+    let pointerX = 0;
+    let pointerY = 0;
+
+    function resizeCanvas() {
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      seedSky();
+    }
+
+    function seedSky() {
+      stars.length = 0;
+      lanterns.length = 0;
+      const starCount = Math.min(150, Math.max(64, Math.floor((width * height) / 9000)));
+      for (let i = 0; i < starCount; i += 1) {
+        stars.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          r: Math.random() * 1.6 + 0.35,
+          pulse: Math.random() * Math.PI * 2,
+          drift: Math.random() * 0.18 + 0.04
+        });
+      }
+      const lanternCount = Math.max(8, Math.floor(width / 150));
+      for (let i = 0; i < lanternCount; i += 1) {
+        lanterns.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          s: Math.random() * 14 + 8,
+          speed: Math.random() * 0.18 + 0.08,
+          sway: Math.random() * Math.PI * 2,
+          color: Math.random() > 0.5 ? "255, 211, 122" : "255, 112, 153"
+        });
+      }
+    }
+
+    function drawSky() {
+      frame += 0.01;
+      context.clearRect(0, 0, width, height);
+      drawMoon();
+      for (const star of stars) {
+        const glow = 0.36 + Math.sin(frame * 3 + star.pulse) * 0.28;
+        const pull = Math.hypot(pointerX - star.x, pointerY - star.y) < 110 ? 0.65 : 0;
+        context.beginPath();
+        context.fillStyle = `rgba(255, 248, 243, ${Math.max(0.14, glow + pull * 0.18)})`;
+        context.arc(star.x + Math.sin(frame + star.pulse) * star.drift * 18, star.y, star.r + pull, 0, Math.PI * 2);
+        context.fill();
+      }
+      for (const lantern of lanterns) {
+        lantern.y -= lantern.speed;
+        lantern.x += Math.sin(frame * 2 + lantern.sway) * 0.08;
+        if (lantern.y < -30) {
+          lantern.y = height + 40;
+          lantern.x = Math.random() * width;
+        }
+        context.save();
+        context.translate(lantern.x, lantern.y);
+        context.rotate(Math.sin(frame + lantern.sway) * 0.08);
+        const gradient = context.createRadialGradient(0, 0, 0, 0, 0, lantern.s * 2.2);
+        gradient.addColorStop(0, `rgba(${lantern.color}, 0.7)`);
+        gradient.addColorStop(1, `rgba(${lantern.color}, 0)`);
+        context.fillStyle = gradient;
+        context.beginPath();
+        context.arc(0, 0, lantern.s * 2.2, 0, Math.PI * 2);
+        context.fill();
+        context.fillStyle = `rgba(${lantern.color}, 0.7)`;
+        context.beginPath();
+        context.moveTo(0, -lantern.s * 0.9);
+        context.quadraticCurveTo(lantern.s * 0.85, 0, 0, lantern.s * 1.05);
+        context.quadraticCurveTo(-lantern.s * 0.85, 0, 0, -lantern.s * 0.9);
+        context.fill();
+        context.restore();
+      }
+      requestAnimationFrame(drawSky);
+    }
+
+    function drawMoon() {
+      const x = width * 0.84;
+      const y = height * 0.18;
+      const radius = Math.min(72, Math.max(44, width * 0.055));
+      const gradient = context.createRadialGradient(x - radius * 0.2, y - radius * 0.2, 0, x, y, radius * 1.7);
+      gradient.addColorStop(0, "rgba(255, 248, 220, 0.62)");
+      gradient.addColorStop(0.54, "rgba(255, 211, 122, 0.18)");
+      gradient.addColorStop(1, "rgba(255, 211, 122, 0)");
+      context.fillStyle = gradient;
+      context.beginPath();
+      context.arc(x, y, radius * 1.7, 0, Math.PI * 2);
+      context.fill();
+      context.fillStyle = "rgba(255, 248, 220, 0.84)";
+      context.beginPath();
+      context.arc(x, y, radius, 0, Math.PI * 2);
+      context.fill();
+      context.fillStyle = "rgba(9, 8, 13, 0.9)";
+      context.beginPath();
+      context.arc(x + radius * 0.42, y - radius * 0.12, radius * 0.95, 0, Math.PI * 2);
+      context.fill();
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    window.addEventListener("pointermove", (event) => {
+      pointerX = event.clientX;
+      pointerY = event.clientY;
+    });
+
+    resizeCanvas();
+    drawSky();
+  </script>
+</body>
+</html>
