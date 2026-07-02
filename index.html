@@ -344,34 +344,28 @@
     }
 
     .wish-star {
-  --size: clamp(48px, 8vw, 66px);
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: var(--size);
-  height: var(--size);
-  display: grid;
-  place-items: center;
-  padding: 0;
-  border: 1px solid rgba(255,255,255,.2);
-  border-radius: 999px;
-  color: var(--ink);
-  cursor: pointer;
-  background:
-    radial-gradient(circle at 34% 26%, rgba(255,255,255,.56), transparent 20%),
-    linear-gradient(145deg, rgba(255,211,122,.34), rgba(255,112,153,.18), rgba(159,241,208,.16));
-  box-shadow:
-    0 0 22px rgba(255,211,122,.22),
-    0 14px 32px rgba(0,0,0,.24);
-
-  transform: translate3d(-50%, -50%, 0);
-  will-change: transform;
-  backface-visibility: hidden;
-  transition:
-    transform .22s ease,
-    box-shadow .22s ease,
-    border-color .22s ease;
-}
+      --size: clamp(48px, 8vw, 66px);
+      position: absolute;
+      left: var(--x);
+      top: var(--y);
+      width: var(--size);
+      height: var(--size);
+      display: grid;
+      place-items: center;
+      padding: 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 999px;
+      color: var(--ink);
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 34% 26%, rgba(255, 255, 255, 0.56), transparent 20%),
+        linear-gradient(145deg, rgba(255, 211, 122, 0.34), rgba(255, 112, 153, 0.18), rgba(159, 241, 208, 0.16));
+      box-shadow:
+        0 0 22px rgba(255, 211, 122, 0.22),
+        0 14px 32px rgba(0, 0, 0, 0.24);
+      transform: translate(-50%, -50%);
+      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+    }
 
     .wish-star::before {
       content: "✦";
